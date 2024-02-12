@@ -187,8 +187,8 @@ int main(int argc, char *argv[]) {
         } else if (strcmp(argv[i], "-d") == 0) {
             detailFlag = TRUE;
             if(i + 1 < argc) {
-                pid = atoi(argv[i + 1]); // Converts the following string to a DWORD for the PID
-                i++; // Increment i to skip the PID on the next iteration
+                pid = atoi(argv[i + 1]); 
+                i++; 
             }
         } else {
             filterName = argv[i];
@@ -216,10 +216,9 @@ int main(int argc, char *argv[]) {
         if (!print_thread_details(pid)) { // Correction ici
             printf("An error occurred while printing the thread list.\n");
         }
-        return 0; // End the program after printing the thread details
+        return 0; 
     }   
 
-    // Call print_process function if -d is not specified
     if (!print_process(detailFlag, filterName)) {
         printf("An error occurred while printing the process list.\n");
     }
