@@ -120,7 +120,7 @@ do {
     } while (Process32Next(hSnapshot, &pe32));
 
     CloseHandle(hSnapshot);
-    printf("Snapshot of processes completed successfully.\n");
+    // printf("Snapshot of processes completed successfully.\n");
     return TRUE;
 }
 
@@ -141,7 +141,7 @@ BOOL print_thread_details(DWORD processID) {
         CloseHandle(hThreadSnap);
         return FALSE;
     }
-    printf("\\n| %-6s | %-3s | %-6s | %-6s | %-10s | %-12s | %-12s |\\n", "Tid", "Pri", "Cswtch", "State", "User Time", "Kernel Time", "Elapsed Time");
+    printf("| %-6s | %-3s | %-6s | %-6s | %-12s | %-12s | %-12s |\n", "Tid", "Pri", "Cswtch", "State", "User Time", "Kernel Time", "Elapsed Time");
     do {
         if(te32.th32OwnerProcessID == processID) {
             HANDLE hThread = OpenThread(THREAD_QUERY_INFORMATION, FALSE, te32.th32ThreadID);
@@ -153,14 +153,14 @@ BOOL print_thread_details(DWORD processID) {
                 uiKernel.HighPart = ftKernel.dwHighDateTime;
                 uiUser.LowPart = ftUser.dwLowDateTime;
                 uiUser.HighPart = ftUser.dwHighDateTime;
-                printf("| %-6lu | %-3ld | %-6s | %-6s | %02u:%02u:%02u.%03u | %02u:%02u:%02u.%03u | %-12s |\\n",
+                printf("| %-6lu | %-3ld | %-6s | %-6s | %02u:%02u:%02u.%03u | %02u:%02u:%02u.%03u | %-12s |\n",
                        te32.th32ThreadID,
                        te32.tpBasePri,
-                       "N/A",  // Placeholder for context switches
-                       "N/A",  // Placeholder for thread state
+                       "N/A",  //pas réussi à récupérer
+                       "N/A",  //pas réussi à récupéer
                        stUser.wHour, stUser.wMinute, stUser.wSecond, stUser.wMilliseconds,
                        stKernel.wHour, stKernel.wMinute, stKernel.wSecond, stKernel.wMilliseconds,
-                       "N/A");  // Placeholder for elapsed time
+                       "N/A");  //pas réussi à récupérer
             }
             if (hThread) {
                 CloseHandle(hThread);
@@ -213,11 +213,11 @@ int main(int argc, char *argv[]) {
     }
 
     if (detailFlag && pid != 0) {
-        if (!print_threads(pid)) {
+        if (!print_thread_details(pid)) { // Correction ici
             printf("An error occurred while printing the thread list.\n");
         }
         return 0; // End the program after printing the thread details
-    }
+    }   
 
     // Call print_process function if -d is not specified
     if (!print_process(detailFlag, filterName)) {
