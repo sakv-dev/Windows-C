@@ -54,8 +54,7 @@ BOOL print_process()
     printf("First snapshot created successfully.\n");
     return TRUE;
 }
-/*
-int check_arg(char argv1)
+int check_arg(char *argv1)
 {
     if(argv1 == "--help" || argv1 == "-h")
     {
@@ -68,14 +67,24 @@ int check_arg(char argv1)
     }
     return 0;
 }
-*/
+int print_one_process(DWORD dwPID)
+{
+    HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwPID);
+    if (hProcess == NULL) {
+        printf("Error opening process.\n");
+        return 1;
+    }
+    printf("Process opened successfully.\n");
+    CloseHandle(hProcess);
+    return 0;
+}
 int main(int argc, char *argv[]) {
 
-/*  if(argc == 2 && my_strlen(argv[1]) == 2 && argv[1][0] == '-' )
+  if(argc == 2 && my_strlen(argv[1]) == 2 && argv[1][0] == '-' )
     {
         return(check_arg(argv[1]));
     }
-    else*/ if(argc != 2) {
+    else if(argc == 1) {
         return(print_process());
     }
     // Close the handle to the snapshot
